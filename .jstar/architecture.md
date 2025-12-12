@@ -1,23 +1,24 @@
-# LinkForge - Project Context
+# LinkForge - Architecture Overview
 
-## Overview
-**LinkForge** is a premium, self-hosted link-in-bio tool designed to be a "Linktree killer" without the monthly fees.
+## Project Summary
+**LinkForge** is a self-hosted link-in-bio tool (Linktree alternative).
+- **Goal:** MUS (Minimum Usable State)
+- **User:** "Pro Dev" (values speed, autonomy)
 
 ## Tech Stack
-- **Framework**: Next.js 15 (App Router)
-- **Styling**: Tailwind CSS v4
-- **Database**: Prisma + SQLite
-- **Validation**: Zod
-- **Language**: TypeScript
+- **Framework:** Next.js 15 (App Router)
+- **Database:** Prisma ORM with SQLite
+- **Styling:** Tailwind CSS v4
+- **Language:** TypeScript
 
-## Folder Structure
-- `src/app`: App Router pages and API routes
-- `src/features`: Domain-specific modules (Feature-Sliced Design)
-- `src/components`: Shared UI components
-- `src/lib`: Utilities and Singletons (Prisma)
-- `docs`: Documentation and Implementation Plans
+## Directory Structure
+- `src/app`: App Router pages and API routes.
+- `src/features`: Feature-Sliced Design (e.g., `src/features/links/`).
+  - Contains: components, hooks, services, types.
+- `src/components/ui`: Shared "dumb" UI components (buttons, cards).
+- `src/lib`: Utilities and shared configurations.
+- `docs/features`: Feature blueprints and specs.
 
-## Key Principles
-- **Server First**: Use React Server Components by default.
-- **Service Pattern**: Business logic separates from API routes.
-- **Feature-Sliced**: Organize code by domain.
+## Key Patterns
+- **Service Pattern:** Logic lives in `services/`.
+- **Feature Sliced:** Code is organized by domain, not type.
