@@ -7,7 +7,7 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 glass">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
+            <svg className="w-8 h-8" viewBox="0 0 100 100" fill="none">
               <defs>
                 <linearGradient id="navGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" style={{ stopColor: "#6366F1" }} />
