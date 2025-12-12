@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  name      String?
+  bio       String?
+  avatar    String?
+  theme     String   @default("dark")
+  links     Link[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Link {
+  id        String   @id @default(cuid())
+  title     String
+  url       String
+  icon      String   @default("🚀") // Emoji or icon identifier
+  order     Int      @default(0)
+  clicks    Int      @default(0)
+  isEnabled Boolean  @default(true)
+  profile   Profile  @relation(fields: [profileId], references: [id])
+  profileId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
