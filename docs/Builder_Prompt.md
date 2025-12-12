@@ -20,6 +20,24 @@ Your mission: Build a premium, self-hosted link-in-bio tool that looks and feels
 
 ---
 
+## Mandatory Mockup-Driven Implementation
+
+> [!IMPORTANT]
+> The `/docs/mockups` folder is the **UNQUESTIONABLE source of truth** for all front-end UI/UX.
+> You must NOT deviate from the layout, color palette, typography, or component structure defined in the mockups.
+> Before implementing any page, open the corresponding mockup file and replicate it exactly.
+
+**Available Mockups:**
+- `docs/mockups/home.html` — Landing page with hero and Forge Effect animation
+- `docs/mockups/profile.html` — Public user profile page (`/[username]`)
+- `docs/mockups/dashboard.html` — Link management dashboard
+
+**Design System Reference:**
+- `docs/design/design-system.html` — Complete tokens, colors, typography, and components
+- `docs/design/sitemap.md` — Page architecture and component hierarchy
+
+---
+
 ## Project Context
 
 ### Tech Stack

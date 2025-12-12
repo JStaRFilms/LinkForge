@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkForge — One Link. Infinite Possibilities.</title>
+    <meta name="description"
+        content="A self-hosted link-in-bio tool that YOU control. Custom domain, analytics, themes — no monthly fees.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50: '#EEF2FF', 100: '#E0E7FF', 200: '#C7D2FE', 300: '#A5B4FC', 400: '#818CF8', 500: '#6366F1', 600: '#4F46E5', 700: '#4338CA', 800: '#3730A3', 900: '#312E81' },
+                        accent: { 50: '#FFF7ED', 100: '#FFEDD5', 200: '#FED7AA', 300: '#FDBA74', 400: '#FB923C', 500: '#F97316', 600: '#EA580C', 700: '#C2410C' },
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'] },
+                    animation: {
+                        'forge': 'forge 3s ease-in-out infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'fade-up': 'fadeUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        forge: { '0%, 100%': { transform: 'scale(1) rotate(0deg)', opacity: '1' }, '50%': { transform: 'scale(1.05) rotate(3deg)', opacity: '0.9' } },
+                        float: { '0%, 100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-20px)' } },
+                        glow: { '0%': { boxShadow: '0 0 20px rgba(99, 102, 241, 0.3)' }, '100%': { boxShadow: '0 0 40px rgba(99, 102, 241, 0.6), 0 0 60px rgba(249, 115, 22, 0.3)' } },
+                        fadeUp: { '0%': { opacity: '0', transform: 'translateY(30px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #6366F1 0%, #F97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .forge-ring {
+            position: absolute;
+            border: 2px solid;
+            border-radius: 50%;
+            animation: forge-ring 3s ease-in-out infinite;
+        }
+
+        @keyframes forge-ring {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        .hover-lift {
+            transition: all 0.2s ease-out;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .stagger-1 {
+            animation-delay: 0.1s;
+        }
+
+        .stagger-2 {
+            animation-delay: 0.2s;
+        }
+
+        .stagger-3 {
+            animation-delay: 0.3s;
+        }
+
+        .stagger-4 {
+            animation-delay: 0.4s;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-50 font-sans min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
+                    <defs>
+                        <linearGradient id="navGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#6366F1" />
+                            <stop offset="100%" style="stop-color:#F97316" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" stroke="url(#navGrad)" stroke-width="4" fill="none" />
+                    <path d="M30 42 C30 36, 36 30, 44 30 L56 30 C64 30, 70 36, 70 42 L70 44 C70 50, 64 54, 56 54 L50 54"
+                        stroke="url(#navGrad)" stroke-width="5" stroke-linecap="round" fill="none" />
+                    <path d="M70 58 C70 64, 64 70, 56 70 L44 70 C36 70, 30 64, 30 58 L30 56 C30 50, 36 46, 44 46 L50 46"
+                        stroke="url(#navGrad)" stroke-width="5" stroke-linecap="round" fill="none" />
+                </svg>
+                <span class="text-xl font-bold gradient-text">LinkForge</span>
+            </div>
+
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#features" class="text-slate-300 hover:text-white transition-colors">Features</a>
+                <a href="#examples" class="text-slate-300 hover:text-white transition-colors">Examples</a>
+                <a href="#pricing" class="text-slate-300 hover:text-white transition-colors">Pricing</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button class="p-2 text-slate-400 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </button>
+                <a href="/dashboard"
+                    class="px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-primary-500/30">
+                    Get Started
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Grand Animation -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <!-- Background Gradient Orbs -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent-500/20 rounded-full blur-3xl animate-float"
+            style="animation-delay: -3s;"></div>
+
+        <div class="relative z-10 max-w-6xl mx-auto px-4 text-center">
+            <!-- Grand Animation: The Forge Effect -->
+            <div class="relative mx-auto w-48 h-48 mb-12">
+                <div class="forge-ring w-48 h-48 border-primary-500/30" style="animation-delay: 0s;"></div>
+                <div class="forge-ring w-56 h-56 border-accent-500/20"
+                    style="animation-delay: 0.5s; left: -1rem; top: -1rem;"></div>
+                <div class="forge-ring w-64 h-64 border-primary-500/10"
+                    style="animation-delay: 1s; left: -2rem; top: -2rem;"></div>
+                <div class="absolute inset-0 flex items-center justify-center animate-glow rounded-full">
+                    <svg class="w-32 h-32 animate-forge" viewBox="0 0 100 100" fill="none">
+                        <defs>
+                            <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#6366F1" />
+                                <stop offset="100%" style="stop-color:#F97316" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="45" stroke="url(#heroGrad)" stroke-width="3" fill="none" />
+                        <path
+                            d="M30 42 C30 36, 36 30, 44 30 L56 30 C64 30, 70 36, 70 42 L70 44 C70 50, 64 54, 56 54 L50 54"
+                            stroke="url(#heroGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                        <path
+                            d="M70 58 C70 64, 64 70, 56 70 L44 70 C36 70, 30 64, 30 58 L30 56 C30 50, 36 46, 44 46 L50 46"
+                            stroke="url(#heroGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                        <circle cx="50" cy="50" r="4" fill="url(#heroGrad)" />
+                    </svg>
+                </div>
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 opacity-0 animate-fade-up">
+                One Link.<br><span class="gradient-text">Infinite Possibilities.</span>
+            </h1>
+
+            <p class="text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto mb-10 opacity-0 animate-fade-up stagger-1">
+                A self-hosted link-in-bio tool that <strong class="text-white">you</strong> control. Custom domain,
+                analytics, themes — no monthly fees.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-up stagger-2">
+                <a href="/dashboard"
+                    class="px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-bold text-lg rounded-2xl transition-all duration-200 hover:shadow-xl hover:shadow-primary-500/30 hover:-translate-y-1">
+                    Create Your Page — Free
+                </a>
+                <a href="#examples"
+                    class="px-8 py-4 bg-slate-800/50 hover:bg-slate-800 text-white font-semibold text-lg rounded-2xl border border-slate-700 transition-all duration-200 hover:-translate-y-1">
+                    View Examples
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-0 animate-fade-up stagger-4">
+            <div class="w-6 h-10 border-2 border-slate-600 rounded-full flex justify-center pt-2">
+                <div class="w-1.5 h-3 bg-slate-400 rounded-full animate-bounce"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 relative">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">Everything You Need</h2>
+                <p class="text-xl text-slate-400">Simple. Powerful. Yours.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="glass rounded-2xl p-8 hover-lift">
+                    <div
+                        class="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Unlimited Links</h3>
+                    <p class="text-slate-400">Add as many links as you need. Drag and drop to reorder. No restrictions,
+                        ever.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass rounded-2xl p-8 hover-lift">
+                    <div
+                        class="w-14 h-14 rounded-xl bg-gradient-to-br from-accent-500 to-accent-600 flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Click Analytics</h3>
+                    <p class="text-slate-400">Know which links perform best. Track clicks, measure engagement, optimize
+                        your bio.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass rounded-2xl p-8 hover-lift">
+                    <div
+                        class="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Beautiful Themes</h3>
+                    <p class="text-slate-400">Choose from stunning themes or create your own. Light mode, dark mode,
+                        your mode.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Example Profile Preview -->
+    <section id="examples" class="py-24 relative">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">See It In Action</h2>
+                <p class="text-xl text-slate-400">Your profile could look this good.</p>
+            </div>
+
+            <!-- Phone Mockup -->
+            <div class="flex justify-center">
+                <div class="relative">
+                    <!-- Phone Frame -->
+                    <div class="w-[320px] bg-slate-900 rounded-[3rem] p-3 border-4 border-slate-800 shadow-2xl">
+                        <div class="w-full bg-slate-950 rounded-[2.5rem] overflow-hidden">
+                            <!-- Notch -->
+                            <div class="h-7 bg-slate-950 flex justify-center items-end pb-1">
+                                <div class="w-24 h-5 bg-slate-900 rounded-full"></div>
+                            </div>
+
+                            <!-- Profile Content -->
+                            <div class="px-6 py-8 min-h-[500px]">
+                                <!-- Avatar -->
+                                <div class="flex flex-col items-center mb-8">
+                                    <div
+                                        class="w-24 h-24 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 p-1 mb-4">
+                                        <div
+                                            class="w-full h-full rounded-full bg-slate-800 flex items-center justify-center">
+                                            <span class="text-3xl font-bold gradient-text">JD</span>
+                                        </div>
+                                    </div>
+                                    <h3 class="text-xl font-bold">John Doe</h3>
+                                    <p class="text-slate-400 text-sm">Creator • Developer • Dreamer</p>
+                                </div>
+
+                                <!-- Links -->
+                                <div class="space-y-3">
+                                    <a href="#"
+                                        class="block w-full p-4 bg-slate-800/50 hover:bg-slate-800 border border-slate-700 rounded-xl text-center font-medium transition-all hover:scale-105">
+                                        🚀 My Portfolio
+                                    </a>
+                                    <a href="#"
+                                        class="block w-full p-4 bg-slate-800/50 hover:bg-slate-800 border border-slate-700 rounded-xl text-center font-medium transition-all hover:scale-105">
+                                        📧 Newsletter
+                                    </a>
+                                    <a href="#"
+                                        class="block w-full p-4 bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl text-center font-bold transition-all hover:scale-105">
+                                        ✨ Latest Project
+                                    </a>
+                                    <a href="#"
+                                        class="block w-full p-4 bg-slate-800/50 hover:bg-slate-800 border border-slate-700 rounded-xl text-center font-medium transition-all hover:scale-105">
+                                        🐦 Twitter
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 relative">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div class="glass rounded-3xl p-12 relative overflow-hidden">
+                <!-- Background glow -->
+                <div class="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-accent-500/10"></div>
+
+                <div class="relative z-10">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4">Ready to Forge Your Links?</h2>
+                    <p class="text-xl text-slate-400 mb-8">Set up your page in under 60 seconds. No credit card
+                        required.</p>
+
+                    <a href="/dashboard"
+                        class="inline-block px-10 py-5 bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-600 hover:to-accent-600 text-white font-bold text-xl rounded-2xl transition-all duration-200 hover:shadow-xl hover:shadow-primary-500/30 hover:-translate-y-1">
+                        Get Started — It's Free
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-slate-800">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <svg class="w-6 h-6" viewBox="0 0 100 100" fill="none">
+                        <defs>
+                            <linearGradient id="footGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#6366F1" />
+                                <stop offset="100%" style="stop-color:#F97316" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="45" stroke="url(#footGrad)" stroke-width="4" fill="none" />
+                        <path d="M30 42 C30 36, 36 30, 44 30 L56 30 C64 30, 70 36, 70 42" stroke="url(#footGrad)"
+                            stroke-width="5" stroke-linecap="round" fill="none" />
+                        <path d="M70 58 C70 64, 64 70, 56 70 L44 70 C36 70, 30 64, 30 58" stroke="url(#footGrad)"
+                            stroke-width="5" stroke-linecap="round" fill="none" />
+                    </svg>
+                    <span class="font-bold gradient-text">LinkForge</span>
+                </div>
+
+                <p class="text-slate-500 text-sm">© 2024 LinkForge. Self-hosted. Open source. Yours.</p>
+
+                <div class="flex gap-4">
+                    <a href="#" class="text-slate-500 hover:text-white transition-colors">GitHub</a>
+                    <a href="#" class="text-slate-500 hover:text-white transition-colors">Twitter</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

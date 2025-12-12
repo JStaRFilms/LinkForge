@@ -19,6 +19,12 @@
 | Auth | NextAuth.js (optional for v1) |
 | Deploy | Vercel |
 
+### Domain & Deployment Strategy
+- **Unified Domain:** `link.jstarstudios.com`
+- **Dashboard:** `link.jstarstudios.com/dashboard` (or `/login`)
+- **Profiles:** `link.jstarstudios.com/[username]` (Root handles wildcard or path rewriting)
+- **Benefit:** Preserves `app.jstarstudios.com` for your future "serious" SaaS. One DNS record to manage.
+
 ---
 
 ## Design Principles

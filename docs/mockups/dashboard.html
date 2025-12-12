@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — LinkForge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50: '#EEF2FF', 100: '#E0E7FF', 200: '#C7D2FE', 300: '#A5B4FC', 400: '#818CF8', 500: '#6366F1', 600: '#4F46E5', 700: '#4338CA', 800: '#3730A3', 900: '#312E81' },
+                        accent: { 50: '#FFF7ED', 100: '#FFEDD5', 200: '#FED7AA', 300: '#FDBA74', 400: '#FB923C', 500: '#F97316', 600: '#EA580C', 700: '#C2410C' },
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #6366F1 0%, #F97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .hover-lift {
+            transition: all 0.2s ease-out;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.15);
+        }
+
+        .drag-handle {
+            cursor: grab;
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-50 font-sans min-h-screen">
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 glass border-r border-slate-800 p-6 hidden md:block">
+            <!-- Logo -->
+            <div class="flex items-center gap-2 mb-10">
+                <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
+                    <defs>
+                        <linearGradient id="sideGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#6366F1" />
+                            <stop offset="100%" style="stop-color:#F97316" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" stroke="url(#sideGrad)" stroke-width="4" fill="none" />
+                    <path d="M30 42 C30 36, 36 30, 44 30 L56 30 C64 30, 70 36, 70 42 L70 44 C70 50, 64 54, 56 54 L50 54"
+                        stroke="url(#sideGrad)" stroke-width="5" stroke-linecap="round" fill="none" />
+                    <path d="M70 58 C70 64, 64 70, 56 70 L44 70 C36 70, 30 64, 30 58 L30 56 C30 50, 36 46, 44 46 L50 46"
+                        stroke="url(#sideGrad)" stroke-width="5" stroke-linecap="round" fill="none" />
+                </svg>
+                <span class="text-xl font-bold gradient-text">LinkForge</span>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="space-y-2">
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 bg-primary-500/10 text-primary-400 rounded-xl font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                    </svg>
+                    Links
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800/50 rounded-xl transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    Analytics
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800/50 rounded-xl transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                    </svg>
+                    Themes
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800/50 rounded-xl transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Settings
+                </a>
+            </nav>
+
+            <!-- Profile Preview Link -->
+            <div class="absolute bottom-6 left-6 right-6">
+                <a href="/johndoe" target="_blank"
+                    class="flex items-center gap-3 px-4 py-3 glass rounded-xl hover:bg-slate-800/50 transition-colors">
+                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    <span class="text-sm text-slate-400">View Profile</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <!-- Header -->
+            <header class="flex items-center justify-between mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold">Your Links</h1>
+                    <p class="text-slate-400 mt-1">Manage and organize your bio links</p>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <!-- Theme Toggle -->
+                    <button class="p-3 glass rounded-xl hover:bg-slate-800/50 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+
+                    <!-- Add Link Button -->
+                    <button
+                        class="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-primary-500/30">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Add Link
+                    </button>
+                </div>
+            </header>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glass rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm text-slate-400">Total Clicks</span>
+                        <span class="text-xs px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded-full">+12%</span>
+                    </div>
+                    <div class="text-4xl font-bold gradient-text">2,847</div>
+                    <div class="mt-3 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                        <div class="h-full w-3/4 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full"></div>
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm text-slate-400">Active Links</span>
+                    </div>
+                    <div class="text-4xl font-bold">5</div>
+                    <p class="text-sm text-slate-500 mt-3">of 5 total links</p>
+                </div>
+
+                <div class="glass rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm text-slate-400">Top Performer</span>
+                    </div>
+                    <div class="text-xl font-bold truncate">My Portfolio</div>
+                    <p class="text-sm text-slate-500 mt-3">1,203 clicks (42%)</p>
+                </div>
+            </div>
+
+            <!-- Links List -->
+            <div class="space-y-4">
+                <h2 class="text-lg font-semibold text-slate-300 mb-4">Links</h2>
+
+                <!-- Link Item 1 -->
+                <div class="glass rounded-2xl p-5 hover-lift group">
+                    <div class="flex items-center gap-4">
+                        <!-- Drag Handle -->
+                        <div class="drag-handle p-2 text-slate-600 hover:text-slate-400 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 8h16M4 16h16" />
+                            </svg>
+                        </div>
+
+                        <!-- Icon -->
+                        <div
+                            class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shrink-0">
+                            <span class="text-xl">🚀</span>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-semibold truncate">My Portfolio</h3>
+                            <p class="text-sm text-slate-400 truncate">https://johndoe.com</p>
+                        </div>
+
+                        <!-- Stats -->
+                        <div class="text-right hidden sm:block">
+                            <div class="text-lg font-semibold">1,203</div>
+                            <div class="text-xs text-slate-500">clicks</div>
+                        </div>
+
+                        <!-- Toggle -->
+                        <button class="relative w-12 h-7 bg-primary-500 rounded-full p-1 transition-colors shrink-0">
+                            <span
+                                class="block w-5 h-5 bg-white rounded-full shadow-md transform translate-x-5 transition-transform"></span>
+                        </button>
+
+                        <!-- Actions -->
+                        <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="p-2 hover:bg-slate-800 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 hover:bg-red-500/20 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-slate-400 hover:text-red-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Link Item 2 (Featured) -->
+                <div
+                    class="rounded-2xl p-5 hover-lift group bg-gradient-to-r from-primary-500/10 to-accent-500/10 border border-primary-500/30">
+                    <div class="flex items-center gap-4">
+                        <div class="drag-handle p-2 text-slate-600 hover:text-slate-400 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 8h16M4 16h16" />
+                            </svg>
+                        </div>
+
+                        <div
+                            class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center shrink-0">
+                            <span class="text-xl">✨</span>
+                        </div>
+
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-semibold truncate">My Latest Project</h3>
+                                <span
+                                    class="text-xs px-2 py-0.5 bg-primary-500/20 text-primary-400 rounded-full">Featured</span>
+                            </div>
+                            <p class="text-sm text-slate-400 truncate">https://coolproject.io</p>
+                        </div>
+
+                        <div class="text-right hidden sm:block">
+                            <div class="text-lg font-semibold">892</div>
+                            <div class="text-xs text-slate-500">clicks</div>
+                        </div>
+
+                        <button class="relative w-12 h-7 bg-primary-500 rounded-full p-1 transition-colors shrink-0">
+                            <span
+                                class="block w-5 h-5 bg-white rounded-full shadow-md transform translate-x-5 transition-transform"></span>
+                        </button>
+
+                        <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="p-2 hover:bg-slate-800/50 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 hover:bg-red-500/20 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-slate-400 hover:text-red-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Link Item 3 -->
+                <div class="glass rounded-2xl p-5 hover-lift group">
+                    <div class="flex items-center gap-4">
+                        <div class="drag-handle p-2 text-slate-600 hover:text-slate-400 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 8h16M4 16h16" />
+                            </svg>
+                        </div>
+
+                        <div
+                            class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shrink-0">
+                            <span class="text-xl">📧</span>
+                        </div>
+
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-semibold truncate">Newsletter</h3>
+                            <p class="text-sm text-slate-400 truncate">https://newsletter.johndoe.com</p>
+                        </div>
+
+                        <div class="text-right hidden sm:block">
+                            <div class="text-lg font-semibold">456</div>
+                            <div class="text-xs text-slate-500">clicks</div>
+                        </div>
+
+                        <button class="relative w-12 h-7 bg-primary-500 rounded-full p-1 transition-colors shrink-0">
+                            <span
+                                class="block w-5 h-5 bg-white rounded-full shadow-md transform translate-x-5 transition-transform"></span>
+                        </button>
+
+                        <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="p-2 hover:bg-slate-800 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 hover:bg-red-500/20 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-slate-400 hover:text-red-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Link Item 4 (Disabled) -->
+                <div class="glass rounded-2xl p-5 opacity-60 group">
+                    <div class="flex items-center gap-4">
+                        <div class="drag-handle p-2 text-slate-600 hover:text-slate-400 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 8h16M4 16h16" />
+                            </svg>
+                        </div>
+
+                        <div class="w-12 h-12 rounded-xl bg-slate-700 flex items-center justify-center shrink-0">
+                            <span class="text-xl">🎥</span>
+                        </div>
+
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-semibold truncate text-slate-500">YouTube Channel</h3>
+                            <p class="text-sm text-slate-600 truncate">https://youtube.com/@johndoe</p>
+                        </div>
+
+                        <div class="text-right hidden sm:block">
+                            <div class="text-lg font-semibold text-slate-500">296</div>
+                            <div class="text-xs text-slate-600">clicks</div>
+                        </div>
+
+                        <button class="relative w-12 h-7 bg-slate-700 rounded-full p-1 transition-colors shrink-0">
+                            <span class="block w-5 h-5 bg-slate-500 rounded-full shadow-md transition-transform"></span>
+                        </button>
+
+                        <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="p-2 hover:bg-slate-800 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 hover:bg-red-500/20 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-slate-400 hover:text-red-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Link Modal (Hidden by default) -->
+    <div class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="glass rounded-2xl p-8 w-full max-w-md">
+            <h2 class="text-2xl font-bold mb-6">Add New Link</h2>
+
+            <form class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">Title</label>
+                    <input type="text" placeholder="My awesome link"
+                        class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">URL</label>
+                    <input type="url" placeholder="https://example.com"
+                        class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">Icon</label>
+                    <div class="grid grid-cols-6 gap-2">
+                        <button type="button"
+                            class="p-3 bg-primary-500/20 border-2 border-primary-500 rounded-xl text-xl">🚀</button>
+                        <button type="button"
+                            class="p-3 bg-slate-800/50 border border-slate-700 rounded-xl text-xl hover:border-slate-600">📧</button>
+                        <button type="button"
+                            class="p-3 bg-slate-800/50 border border-slate-700 rounded-xl text-xl hover:border-slate-600">🎥</button>
+                        <button type="button"
+                            class="p-3 bg-slate-800/50 border border-slate-700 rounded-xl text-xl hover:border-slate-600">☕</button>
+                        <button type="button"
+                            class="p-3 bg-slate-800/50 border border-slate-700 rounded-xl text-xl hover:border-slate-600">✨</button>
+                        <button type="button"
+                            class="p-3 bg-slate-800/50 border border-slate-700 rounded-xl text-xl hover:border-slate-600">💼</button>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 pt-4">
+                    <button type="button"
+                        class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="flex-1 py-3 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl transition-all">
+                        Add Link
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
