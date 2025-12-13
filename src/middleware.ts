@@ -1,17 +1,21 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+// Cookie configuration constants
+const COOKIE_USER_ID = "linkforge_user_id";
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
+
+export function middleware(request: NextRequest): NextResponse {
     const response = NextResponse.next();
 
-    // Ensure "linkforge_user_id" cookie exists
-    if (!request.cookies.has("linkforge_user_id")) {
+    // Ensure user ID cookie exists for session tracking
+    if (!request.cookies.has(COOKIE_USER_ID)) {
         const userId = crypto.randomUUID();
-        response.cookies.set("linkforge_user_id", userId, {
+        response.cookies.set(COOKIE_USER_ID, userId, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
+            secure: true, // Always secure (modern browsers handle correctly)
             sameSite: "lax",
-            maxAge: 60 * 60 * 24 * 365, // 1 year
+            maxAge: COOKIE_MAX_AGE,
             path: "/",
         });
     }
