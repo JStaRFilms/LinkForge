@@ -16,6 +16,12 @@
     - API Route Handlers (`app/api/...`) are thin controllers—parse requests, call services, return responses.
 - **Feature-Sliced Design:** Feature code lives in `src/features/[FeatureName]/`.
 
+## Documentation
+
+- **Feature docs live in `docs/features/`** (e.g., `docs/features/themes.md`), NOT per-file.
+- A single doc covers an entire feature (schemas, actions, components).
+- Sub-files like `schemas.ts` do NOT require separate documentation if the parent feature doc exists.
+
 ## Validation
 
 - **All inputs must be validated with Zod.** This includes API route bodies, form data, and URL parameters.
@@ -31,7 +37,13 @@
 - Never log sensitive data (API keys, passwords, tokens).
 - Validate and sanitize all user-provided content before rendering.
 
+## Development Mode
+
+- **Placeholder auth (`johndoe`) is intentional** during MUS development. See `src/lib/auth.ts` TODO for migration path.
+- This is NOT a security vulnerability—it's documented dev scaffolding.
+
 ## Testing & Code Quality
 
 - Before merging, ensure `npm run build` and `npm run lint` pass.
 - Fix lint errors before committing.
+

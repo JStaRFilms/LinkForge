@@ -11,6 +11,7 @@
  * 3. All 7+ dependent files will "just work"
  */
 
+import { cache } from "react";
 import { prisma } from "@/lib/prisma";
 
 export interface AuthProfile {
@@ -23,8 +24,10 @@ export interface AuthProfile {
 /**
  * Get the current authenticated user's profile.
  * Throws if not authenticated or profile doesn't exist.
+ * 
+ * Uses React cache() to deduplicate calls within the same request.
  */
-export async function getCurrentProfile(): Promise<AuthProfile> {
+export const getCurrentProfile = cache(async (): Promise<AuthProfile> => {
     // TODO: Replace with real auth
     // const session = await auth();
     // if (!session?.user) throw new Error("Not authenticated");
@@ -42,7 +45,7 @@ export async function getCurrentProfile(): Promise<AuthProfile> {
     }
 
     return profile;
-}
+});
 
 /**
  * Get just the profile ID for the current user.

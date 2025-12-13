@@ -9,6 +9,19 @@ export const LinksService = {
         });
     },
 
+    /**
+     * Get top links by clicks for analytics display.
+     * @param profileId - Profile to fetch links for
+     * @param limit - Max number of links to return (default: 20)
+     */
+    async getTopLinks(profileId: string, limit: number = 20) {
+        return prisma.link.findMany({
+            where: { profileId },
+            orderBy: { clicks: "desc" },
+            take: limit,
+        });
+    },
+
     async createLink(profileId: string, data: CreateLinkInput) {
         // Get max order to append to end
         const lastLink = await prisma.link.findFirst({

@@ -18,7 +18,8 @@ export default async function AnalyticsPage() {
 
     let links;
     try {
-        links = await LinksService.getLinks(profile.id);
+        // Use getTopLinks for better performance (fetches only top 20 by clicks)
+        links = await LinksService.getTopLinks(profile.id);
     } catch {
         return (
             <div className="glass rounded-2xl p-6 text-center">
