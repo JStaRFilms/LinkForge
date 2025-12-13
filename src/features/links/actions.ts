@@ -40,8 +40,14 @@ export async function deleteLinkAction(id: string) {
 export async function updateLinkAction(formData: FormData) {
     const profileId = await requireProfileId();
 
+    // Validate id field before processing
+    const id = formData.get("id");
+    if (!id || typeof id !== "string") {
+        return { error: { fieldErrors: {}, formErrors: ["Missing link ID"] } };
+    }
+
     const rawData = {
-        id: formData.get("id") as string,
+        id,
         title: formData.get("title"),
         url: formData.get("url"),
         icon: formData.get("icon"),

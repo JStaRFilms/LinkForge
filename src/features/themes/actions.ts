@@ -10,7 +10,12 @@ import { themeKeySchema } from "./schemas";
  * @param theme - Theme key to set (validated with Zod)
  */
 export async function updateThemeAction(theme: string) {
-    const profile = await getCurrentProfile();
+    let profile;
+    try {
+        profile = await getCurrentProfile();
+    } catch {
+        return { error: "Unauthorized" };
+    }
 
     // Validate theme key with Zod
     const parsed = themeKeySchema.safeParse(theme);

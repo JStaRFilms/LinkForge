@@ -81,5 +81,8 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
 };
 
 export function getTheme(key: string): ThemeConfig {
-    return THEMES[key as ThemeKey] || THEMES.dark;
+    if (key in THEMES) {
+        return THEMES[key as ThemeKey];
+    }
+    return THEMES.dark;
 }
