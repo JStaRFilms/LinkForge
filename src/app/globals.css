@@ -1,27 +1,115 @@
 @import "tailwindcss";
 
-@theme {
-  /* Primary Colors - Indigo */
-  --color-primary-50: #EEF2FF;
-  --color-primary-100: #E0E7FF;
-  --color-primary-200: #C7D2FE;
-  --color-primary-300: #A5B4FC;
-  --color-primary-400: #818CF8;
-  --color-primary-500: #6366F1;
-  --color-primary-600: #4F46E5;
-  --color-primary-700: #4338CA;
-  --color-primary-800: #3730A3;
-  --color-primary-900: #312E81;
+/* ==========================================================================
+   CORE DESIGN TOKENS (Tailwind v4 - CSS-first approach)
+   ========================================================================== */
 
-  /* Accent Colors - Orange */
-  --color-accent-50: #FFF7ED;
-  --color-accent-100: #FFEDD5;
-  --color-accent-200: #FED7AA;
-  --color-accent-300: #FDBA74;
-  --color-accent-400: #FB923C;
-  --color-accent-500: #F97316;
-  --color-accent-600: #EA580C;
-  --color-accent-700: #C2410C;
+@layer base {
+  :root {
+    /* Core Semantic Colors - Light Mode (Default) */
+    --color-background: #f1f5f9;
+    /* slate-100 */
+    --color-foreground: #0f172a;
+    /* slate-900 */
+    --color-muted: #64748b;
+    /* slate-500 */
+    --color-muted-foreground: #475569;
+    /* slate-600 */
+
+    /* Card/Surface Colors */
+    --color-card: #ffffff;
+    --color-card-foreground: #0f172a;
+
+    /* Border & Input */
+    --color-border: #cbd5e1;
+    /* slate-300 */
+    --color-input: #e2e8f0;
+    /* slate-200 */
+    --color-ring: #6366f1;
+    /* primary-500 */
+
+    /* Primary Colors - Indigo */
+    --color-primary-50: #EEF2FF;
+    --color-primary-100: #E0E7FF;
+    --color-primary-200: #C7D2FE;
+    --color-primary-300: #A5B4FC;
+    --color-primary-400: #818CF8;
+    --color-primary-500: #6366F1;
+    --color-primary-600: #4F46E5;
+    --color-primary-700: #4338CA;
+    --color-primary-800: #3730A3;
+    --color-primary-900: #312E81;
+
+    /* Accent Colors - Orange */
+    --color-accent-50: #FFF7ED;
+    --color-accent-100: #FFEDD5;
+    --color-accent-200: #FED7AA;
+    --color-accent-300: #FDBA74;
+    --color-accent-400: #FB923C;
+    --color-accent-500: #F97316;
+    --color-accent-600: #EA580C;
+    --color-accent-700: #C2410C;
+  }
+
+  .dark {
+    /* Dark Mode Overrides */
+    --color-background: #020617;
+    /* slate-950 */
+    --color-foreground: #f8fafc;
+    /* slate-50 */
+    --color-muted: #94a3b8;
+    /* slate-400 */
+    --color-muted-foreground: #cbd5e1;
+    /* slate-300 */
+
+    --color-card: rgba(15, 23, 42, 0.8);
+    /* slate-900/80 */
+    --color-card-foreground: #f8fafc;
+
+    --color-border: #334155;
+    /* slate-700 */
+    --color-input: #1e293b;
+    /* slate-800 */
+    --color-ring: #818cf8;
+    /* primary-400 */
+  }
+}
+
+@theme {
+  /* Binding tokens to CSS variables */
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-muted: var(--color-muted);
+  --color-muted-foreground: var(--color-muted-foreground);
+
+  --color-card: var(--color-card);
+  --color-card-foreground: var(--color-card-foreground);
+
+  --color-border: var(--color-border);
+  --color-input: var(--color-input);
+  --color-ring: var(--color-ring);
+
+  /* Primary */
+  --color-primary-50: var(--color-primary-50);
+  --color-primary-100: var(--color-primary-100);
+  --color-primary-200: var(--color-primary-200);
+  --color-primary-300: var(--color-primary-300);
+  --color-primary-400: var(--color-primary-400);
+  --color-primary-500: var(--color-primary-500);
+  --color-primary-600: var(--color-primary-600);
+  --color-primary-700: var(--color-primary-700);
+  --color-primary-800: var(--color-primary-800);
+  --color-primary-900: var(--color-primary-900);
+
+  /* Accent */
+  --color-accent-50: var(--color-accent-50);
+  --color-accent-100: var(--color-accent-100);
+  --color-accent-200: var(--color-accent-200);
+  --color-accent-300: var(--color-accent-300);
+  --color-accent-400: var(--color-accent-400);
+  --color-accent-500: var(--color-accent-500);
+  --color-accent-600: var(--color-accent-600);
+  --color-accent-700: var(--color-accent-700);
 
   /* Animations */
   --animate-forge: forge 3s ease-in-out infinite;
@@ -30,45 +118,84 @@
   --animate-fade-up: fadeUp 0.8s ease-out forwards;
 
   @keyframes forge {
-    0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
-    50% { transform: scale(1.05) rotate(3deg); opacity: 0.9; }
+
+    0%,
+    100% {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
+
+    50% {
+      transform: scale(1.05) rotate(3deg);
+      opacity: 0.9;
+    }
   }
 
   @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
   }
 
   @keyframes glow {
-    0% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
-    100% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.6), 0 0 60px rgba(249, 115, 22, 0.3); }
+    0% {
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+    }
+
+    100% {
+      box-shadow: 0 0 40px rgba(99, 102, 241, 0.6), 0 0 60px rgba(249, 115, 22, 0.3);
+    }
   }
 
   @keyframes fadeUp {
-    0% { opacity: 0; transform: translateY(30px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
-/* Custom Utilities */
+/* ==========================================================================
+   BASE LAYER - Apply tokens globally
+   ========================================================================== */
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+/* ==========================================================================
+   CUSTOM UTILITIES
+   ========================================================================== */
+
 @layer utilities {
   .gradient-text {
-    background: linear-gradient(135deg, #6366F1 0%, #F97316 100%);
+    background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-accent-500) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .glass {
-    background: rgba(15, 23, 42, 0.8);
+    background: var(--color-card);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .glass-light {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--color-border);
   }
 
   .forge-ring {
@@ -81,60 +208,25 @@
   .hover-lift {
     transition: all 0.2s ease-out;
   }
-  
+
   .hover-lift:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 40px rgba(99, 102, 241, 0.3);
   }
 
-  .stagger-1 { animation-delay: 0.1s; }
-  .stagger-2 { animation-delay: 0.2s; }
-  .stagger-3 { animation-delay: 0.3s; }
-  .stagger-4 { animation-delay: 0.4s; }
-}
+  .stagger-1 {
+    animation-delay: 0.1s;
+  }
 
-/* Base Styles - Light Mode Default */
-body {
-  @apply bg-slate-100 text-slate-900 antialiased;
-}
+  .stagger-2 {
+    animation-delay: 0.2s;
+  }
 
-/* Dark Mode Override */
-html.dark body {
-  @apply bg-slate-950 text-slate-50;
-}
+  .stagger-3 {
+    animation-delay: 0.3s;
+  }
 
-/* Glass utility for light mode */
-html:not(.dark) .glass {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-/* Slate text adjustments for light mode */
-html:not(.dark) .text-slate-400 {
-  color: rgb(100 116 139); /* slate-500 for better contrast */
-}
-
-html:not(.dark) .text-slate-500 {
-  color: rgb(71 85 105); /* slate-600 for better contrast */
-}
-
-html:not(.dark) .bg-slate-800 {
-  background-color: rgb(226 232 240); /* slate-200 */
-}
-
-html:not(.dark) .bg-slate-800\/50 {
-  background-color: rgb(226 232 240 / 0.5);
-}
-
-html:not(.dark) .border-slate-700 {
-  border-color: rgb(203 213 225); /* slate-300 */
-}
-
-html:not(.dark) .hover\:bg-slate-800:hover {
-  background-color: rgb(226 232 240); /* slate-200 */
-}
-
-html:not(.dark) .hover\:bg-slate-800\/50:hover {
-  background-color: rgb(226 232 240 / 0.5);
+  .stagger-4 {
+    animation-delay: 0.4s;
+  }
 }

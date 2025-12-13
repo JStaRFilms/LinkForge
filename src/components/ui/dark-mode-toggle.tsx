@@ -3,29 +3,45 @@
 import { useEffect, useState } from "react";
 
 export default function DarkModeToggle() {
-    const [isDark, setIsDark] = useState(true);
+    const [isDark, setIsDark] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        // Check initial state from document
-        const htmlEl = document.documentElement;
-        setIsDark(htmlEl.classList.contains("dark"));
+        setMounted(true);
+        // On mount, check if dark mode is active
+        const isDarkMode = document.documentElement.classList.contains("dark");
+        setIsDark(isDarkMode);
     }, []);
 
     function toggle() {
         const htmlEl = document.documentElement;
         if (isDark) {
             htmlEl.classList.remove("dark");
+            localStorage.setItem("theme", "light");
             setIsDark(false);
         } else {
             htmlEl.classList.add("dark");
+            localStorage.setItem("theme", "dark");
             setIsDark(true);
         }
+    }
+
+    // Prevent hydration mismatch by returning a placeholder or null until mounted
+    // However, for a simple toggle, rendering a default state (like light) is often acceptable
+    // or rendering the button but ensuring it syncs quickly.
+    // To avoid layout shift, we render it but maybe simpler logic.
+    if (!mounted) {
+        return (
+            <button className="p-3 glass rounded-xl hover:bg-input transition-colors opacity-0">
+                <span className="w-5 h-5 block" />
+            </button>
+        );
     }
 
     return (
         <button
             onClick={toggle}
-            className="p-3 glass rounded-xl hover:bg-slate-800/50 transition-colors"
+            className="p-3 glass rounded-xl hover:bg-input transition-colors"
             aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
         >
             {isDark ? (

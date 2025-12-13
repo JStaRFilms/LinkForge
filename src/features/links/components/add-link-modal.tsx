@@ -24,35 +24,35 @@ export default function AddLinkModal({ onClose }: AddLinkModalProps) {
 
                 <form action={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-2">Title</label>
+                        <label className="block text-sm font-medium text-muted-foreground mb-2">Title</label>
                         <input
                             name="title"
                             type="text"
                             placeholder="My awesome link"
                             required
-                            className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                            className="w-full px-4 py-3 bg-input border border-border rounded-xl text-foreground placeholder-muted focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-2">URL</label>
+                        <label className="block text-sm font-medium text-muted-foreground mb-2">URL</label>
                         <input
                             name="url"
                             type="url"
                             placeholder="https://example.com"
                             required
-                            className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                            className="w-full px-4 py-3 bg-input border border-border rounded-xl text-foreground placeholder-muted focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-2">Icon</label>
+                        <label className="block text-sm font-medium text-muted-foreground mb-2">Icon</label>
                         <div className="grid grid-cols-6 gap-2">
                             {/* Simplified Icon Picker for now */}
                             {['🚀', '📧', '🎥', '☕', '✨', '💼', '🐦', '📷', '🎵', '🛒'].map((emoji) => (
                                 <label key={emoji} className="cursor-pointer">
                                     <input type="radio" name="icon" value={emoji} className="peer sr-only" defaultChecked={emoji === '🚀'} />
-                                    <div className="p-3 bg-slate-100 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl text-xl hover:border-slate-400 dark:hover:border-slate-600 peer-checked:bg-primary-500/20 peer-checked:border-primary-500 flex items-center justify-center">
+                                    <div className="p-3 bg-input border border-border rounded-xl text-xl hover:border-muted peer-checked:bg-primary-500/20 peer-checked:border-primary-500 flex items-center justify-center">
                                         {emoji}
                                     </div>
                                 </label>
@@ -65,7 +65,7 @@ export default function AddLinkModal({ onClose }: AddLinkModalProps) {
                             type="button"
                             onClick={onClose}
                             disabled={isPending}
-                            className="flex-1 py-3 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-semibold rounded-xl transition-colors disabled:opacity-50"
+                            className="flex-1 py-3 bg-input hover:bg-border text-foreground font-semibold rounded-xl transition-colors disabled:opacity-50"
                         >
                             Cancel
                         </button>

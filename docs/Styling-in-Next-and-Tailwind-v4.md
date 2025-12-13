@@ -73,84 +73,57 @@ export default config;
 
 - Global stylesheet (e.g., `src/app/globals.css` or `src/styles/tailwind.css`):
 
-  
-
 ```css
-
 @import "tailwindcss";
 
-  
+/* 1. Define your CSS variables for light/dark mode in the base layer */
+@layer base {
+  :root {
+    --color-background: #ffffff;
+    --color-foreground: #0b1221;
+    --color-border: #e5e7eb;
+    --color-ring: #3b82f6;
 
-/* Core design tokens used by Tailwind v4 utilities */
+    /* Brand tokens */
+    --color-brand-primary: #1e40af;
+    --color-brand-accent: #8b5cf6;
+  }
 
+  /* Dark mode overrides */
+  .dark {
+    --color-background: #0b1221;
+    --color-foreground: #e5e7eb;
+    --color-border: #374151;
+    --color-ring: #8b5cf6;
+  }
+}
+
+/* 2. Map Tailwind tokens to these variables */
 @theme {
+  /* Core tokens */
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-border: var(--color-border);
+  --color-ring: var(--color-ring);
 
-  /* Required core color tokens used by utilities like bg-background, text-foreground, border-border, ring */
-
-  --color-background: #ffffff;
-
-  --color-foreground: #0b1221;
-
-  --color-border: #e5e7eb;
-
-  --color-ring: #3b82f6;
-
-  
-
-  /* Example brand tokens (add your own) */
-
-  --color-brand-primary: #1e40af;
-
-  --color-brand-secondary: #4f46e5;
-
-  --color-brand-accent: #8b5cf6;
-
+  /* Custom tokens */
+  --color-brand-primary: var(--color-brand-primary);
+  --color-brand-accent: var(--color-brand-accent);
 }
-
-  
-
-/* Dark-mode overrides (activated by adding class="dark" on <html>) */
-
-@theme .dark {
-
-  --color-background: #0b1221;
-
-  --color-foreground: #e5e7eb;
-
-  --color-border: #374151;
-
-  --color-ring: #8b5cf6;
-
-}
-
-  
 
 /* Optional: Your custom keyframes and component classes */
-
 @keyframes fade-in-up {
-
-  from { opacity: 0; transform: translateY(16px); }
-
-  to { opacity: 1; transform: translateY(0); }
-
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
-  
 
 .animate-fade-in-up { animation: fade-in-up 0.6s ease-out both; }
 
-  
-
-/* Base layer examples that leverage the tokens */
-
+/* Base layer examples */
 @layer base {
-
-  * { @apply border-border outline-ring/50; }
-
-  body { @apply bg-background text-foreground; }
-
+  * { @apply border-border outline-ring/50; }
+  body { @apply bg-background text-foreground; }
 }
-
 ```
 
   

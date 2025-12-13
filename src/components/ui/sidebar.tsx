@@ -38,7 +38,7 @@ export default function Sidebar() {
     const pathname = usePathname();
 
     return (
-        <aside className="w-64 glass border-r border-slate-200 dark:border-slate-800 p-6 hidden md:block fixed h-full">
+        <aside className="w-64 glass border-r border-border p-6 hidden md:block fixed h-full">
             {/* Logo */}
             <div className="flex items-center gap-2 mb-10">
                 <svg className="w-8 h-8" viewBox="0 0 100 100" fill="none">
@@ -64,8 +64,8 @@ export default function Sidebar() {
                             key={item.href}
                             href={item.href}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${isActive
-                                ? "bg-primary-500/10 text-primary-600 dark:text-primary-400"
-                                : "text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200"
+                                ? "bg-primary-500/10 text-primary-500"
+                                : "text-muted hover:bg-input hover:text-foreground"
                                 }`}
                         >
                             {item.icon}
@@ -77,11 +77,11 @@ export default function Sidebar() {
 
             {/* Profile Preview Link */}
             <div className="absolute bottom-6 left-6 right-6">
-                <Link href="/johndoe" target="_blank" className="flex items-center gap-3 px-4 py-3 glass rounded-xl hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors">
-                    <svg className="w-5 h-5 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <Link href="/johndoe" target="_blank" className="flex items-center gap-3 px-4 py-3 glass rounded-xl hover:bg-input transition-colors">
+                    <svg className="w-5 h-5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
-                    <span className="text-sm text-slate-600 dark:text-slate-400">View Profile</span>
+                    <span className="text-sm text-muted">View Profile</span>
                 </Link>
             </div>
         </aside>
