@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id        String    @id @default(cuid())
-  email     String?   @unique // Optional for cookie-based auth, required for full auth
+  email     String?   // Optional for cookie-based auth; add @unique when auth is required
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   profiles  Profile[]
