@@ -1,33 +1,33 @@
 import { User, Profile } from "@prisma/client";
+import { z } from "zod";
 
 import { prisma } from "@/lib/prisma";
 
 type UserWithProfiles = User & { profiles: Profile[] };
 
-// UUID validation regex
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+// Zod schema for UUID validation
+const UserIdSchema = z.string().uuid("Invalid user ID format");
 
 export const UserService = {
     /**
      * Ensures a user exists for the given ID. If not, creates a new one.
      * Uses upsert to prevent race conditions.
-     * 
+     *
      * @param userId - Optional UUID from cookie
      * @returns User with profiles
-     * @throws Error if userId is provided but malformed
+     * @throws ZodError if userId is provided but malformed
      */
     async ensureUser(userId?: string): Promise<UserWithProfiles> {
-        // If userId provided, validate format
+        // If userId provided, validate format with Zod
         if (userId !== undefined) {
-            if (!UUID_REGEX.test(userId)) {
-                throw new Error(`Invalid user ID format: ${userId.substring(0, 20)}...`);
-            }
+            const validatedId = UserIdSchema.parse(userId);
 
-            // Use upsert to handle race conditions atomically
+            // Upsert is atomic - no race condition issues here
+            // Note: profiles relation is optional, so create:{} works fine
             return prisma.user.upsert({
-                where: { id: userId },
+                where: { id: validatedId },
                 update: {}, // No update needed, just return existing
-                create: { id: userId },
+                create: { id: validatedId },
                 include: { profiles: true },
             });
         }
@@ -47,9 +47,7 @@ export const UserService = {
     async getUserById(userId: string): Promise<UserWithProfiles | null> {
         return prisma.user.findUnique({
             where: { id: userId },
-            include: { profiles: true }
+            include: { profiles: true },
         });
-    }
+    },
 };
-
-

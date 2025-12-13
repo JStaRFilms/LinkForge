@@ -1,21 +1,37 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { signCookie, verifyCookie } from "@/lib/cookie-utils";
 
 // Cookie configuration constants
 const COOKIE_USER_ID = "linkforge_user_id";
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
+const ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365;
 
-export function middleware(request: NextRequest): NextResponse {
+export async function middleware(request: NextRequest): Promise<NextResponse> {
     const response = NextResponse.next();
+    const existingCookie = request.cookies.get(COOKIE_USER_ID)?.value;
 
-    // Ensure user ID cookie exists for session tracking
-    if (!request.cookies.has(COOKIE_USER_ID)) {
+    // Check if we need to set a new cookie
+    let needsNewCookie = false;
+
+    if (!existingCookie) {
+        needsNewCookie = true;
+    } else {
+        // Verify existing cookie signature
+        const verifiedUserId = await verifyCookie(existingCookie);
+        if (!verifiedUserId) {
+            // Cookie was tampered with or invalid format - issue new one
+            needsNewCookie = true;
+        }
+    }
+
+    if (needsNewCookie) {
         const userId = crypto.randomUUID();
-        response.cookies.set(COOKIE_USER_ID, userId, {
+        const signedUserId = await signCookie(userId);
+        response.cookies.set(COOKIE_USER_ID, signedUserId, {
             httpOnly: true,
-            secure: true, // Always secure (modern browsers handle correctly)
+            secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
-            maxAge: COOKIE_MAX_AGE,
+            maxAge: ONE_YEAR_IN_SECONDS,
             path: "/",
         });
     }

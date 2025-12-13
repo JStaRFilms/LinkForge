@@ -2,7 +2,7 @@
  * Authentication Helper
  *
  * Centralized auth abstraction for LinkForge.
- * Currently uses seed profile as placeholder.
+ * Uses cookie-based user identification with HMAC-signed cookies.
  *
  * TODO: Replace with real auth provider (next-auth, clerk, supabase-auth)
  * When implementing real auth:
@@ -13,7 +13,9 @@
 
 import { cache } from "react";
 import { cookies } from "next/headers";
+import { User, Profile } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { verifyCookie } from "@/lib/cookie-utils";
 import { UserService } from "@/features/user/services/user.service";
 
 export interface AuthProfile {
@@ -24,39 +26,36 @@ export interface AuthProfile {
     userId: string;
 }
 
+type UserWithProfiles = User & { profiles: Profile[] };
+
 const COOKIE_USER_ID = "linkforge_user_id";
 const COOKIE_ACTIVE_PROFILE = "linkforge_active_profile";
 
 /**
- * Get (or create) the current user based on cookie.
+ * Get (or create) the current user based on signed cookie.
+ * Verifies cookie signature before trusting the user ID.
  */
-export const getCurrentUser = cache(async () => {
+export const getCurrentUser = cache(async (): Promise<UserWithProfiles> => {
     const cookieStore = await cookies();
-    const userId = cookieStore.get(COOKIE_USER_ID)?.value;
+    const signedUserId = cookieStore.get(COOKIE_USER_ID)?.value;
 
-    const user = await UserService.ensureUser(userId);
+    // Verify signature and extract user ID
+    const userId = signedUserId ? await verifyCookie(signedUserId) : undefined;
 
-    // If we created a new user or recovered one, ensure cookie is set
-    // Note: In Server Components, we can't set cookies easily without Middleware or Server Action.
-    // Ideally this happens in Middleware. For now, we'll rely on the fact that if we just created it, the UI will need to set it?
-    // Actually, ensureUser returns the user. If ID changed, we need to set it.
-    // Limitation: RSC cannot Set-Cookie. We will handle cookie setting in the specialized "init" flow or Actions.
-    // But for now, let's assume if it's missing, we might need a client interaction or Middleware to persist it.
-    // Strategy: We'll read it here. If missing, we'll return a new User, but the client won't know ID until we pass it.
-
-    return user;
+    // ensureUser handles both existing and new users
+    return UserService.ensureUser(userId ?? undefined);
 });
 
 /**
  * Get the current active profile.
  * - Checks active_profile cookie
  * - Verifies ownership
- * - Fallbacks to first profile
+ * - Fallbacks to primary or first profile
  * - Returns null if no profiles exist (onboarding state)
  */
 export const getCurrentProfile = cache(async (): Promise<AuthProfile | null> => {
     const user = await getCurrentUser();
-    if (!user) return null; // Should not happen with ensureUser
+    if (!user) return null;
 
     const cookieStore = await cookies();
     const activeProfileId = cookieStore.get(COOKIE_ACTIVE_PROFILE)?.value;
@@ -69,11 +68,17 @@ export const getCurrentProfile = cache(async (): Promise<AuthProfile | null> => 
 
     let activeProfile = profiles.find((p) => p.id === activeProfileId);
     if (!activeProfile) {
-        // Fallback to primary or first
         activeProfile = profiles.find((p) => p.isPrimary) || profiles[0];
     }
 
-    return activeProfile;
+    // Map to AuthProfile interface
+    return {
+        id: activeProfile.id,
+        username: activeProfile.username,
+        name: activeProfile.name,
+        theme: activeProfile.theme,
+        userId: activeProfile.userId,
+    };
 });
 
 /**
@@ -87,3 +92,4 @@ export async function requireProfileId(): Promise<string> {
     }
     return profile.id;
 }
+
