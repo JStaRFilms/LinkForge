@@ -2,9 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ProfileSwitcher from "@/features/profile/components/profile-switcher";
+import { AuthProfile } from "@/lib/auth";
 
 interface SidebarProps {
-    username: string;
+    username?: string;
+    profiles: AuthProfile[];
+    activeProfileId: string;
 }
 
 const navItems = [
@@ -37,13 +41,13 @@ const navItems = [
     },
 ];
 
-export default function Sidebar({ username }: SidebarProps) {
+export default function Sidebar({ username, profiles, activeProfileId }: SidebarProps) {
     const pathname = usePathname();
 
     return (
-        <aside className="w-64 glass border-r border-border p-6 hidden md:block fixed h-full">
+        <aside className="w-64 glass border-r border-border p-6 hidden md:block fixed h-full flex flex-col">
             {/* Logo */}
-            <div className="flex items-center gap-2 mb-10">
+            <div className="flex items-center gap-2 mb-6">
                 <svg className="w-8 h-8" viewBox="0 0 100 100" fill="none">
                     <defs>
                         <linearGradient id="sideGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -58,8 +62,13 @@ export default function Sidebar({ username }: SidebarProps) {
                 <span className="text-xl font-bold gradient-text">LinkForge</span>
             </div>
 
+            {/* Profile Switcher */}
+            <div className="mb-6">
+                <ProfileSwitcher profiles={profiles} activeProfileId={activeProfileId} />
+            </div>
+
             {/* Navigation */}
-            <nav className="space-y-2">
+            <nav className="space-y-2 flex-1">
                 {navItems.map((item) => {
                     const isActive = pathname === item.href;
                     return (
@@ -79,14 +88,16 @@ export default function Sidebar({ username }: SidebarProps) {
             </nav>
 
             {/* Profile Preview Link */}
-            <div className="absolute bottom-6 left-6 right-6">
-                <Link href={`/${username}`} target="_blank" className="flex items-center gap-3 px-4 py-3 glass rounded-xl hover:bg-input transition-colors">
-                    <svg className="w-5 h-5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                    <span className="text-sm text-muted">View Profile</span>
-                </Link>
-            </div>
+            {username && (
+                <div className="mt-auto">
+                    <Link href={`/${username}`} target="_blank" className="flex items-center gap-3 px-4 py-3 glass rounded-xl hover:bg-input transition-colors">
+                        <svg className="w-5 h-5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                        <span className="text-sm text-muted">View Profile</span>
+                    </Link>
+                </div>
+            )}
         </aside>
     );
 }
