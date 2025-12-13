@@ -7,6 +7,20 @@ const COOKIE_USER_ID = "linkforge_user_id";
 const ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365;
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
+    const url = request.nextUrl;
+    const hostname = request.headers.get("host") || "";
+
+    // allow localhost and the main domain (e.g. link.jstarstudios.com or whatever is configured)
+    // For local dev, we might use "localhost:3000". In prod, "link.jstarstudios.com".
+    // We assume any other hostname is a custom domain.
+    const isMainDomain = hostname.includes("localhost") || hostname.includes("link.jstarstudios.com"); // Adjust based on env if needed
+
+    // If it's a custom domain, rewrite the path to /domain-profile/[domain]/[path]
+    if (!isMainDomain && !url.pathname.startsWith("/domain-profile")) {
+        // Rewrite to internal route
+        return NextResponse.rewrite(new URL(`/domain-profile/${hostname}${url.pathname}`, request.url));
+    }
+
     const response = NextResponse.next();
     const existingCookie = request.cookies.get(COOKIE_USER_ID)?.value;
 

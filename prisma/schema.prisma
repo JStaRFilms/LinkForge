@@ -34,9 +34,25 @@ model Profile {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  domains   Domain[]
+
   @@index([userId])
   // Note: SQLite doesn't support partial unique indexes.
   // isPrimary enforcement is handled at the application layer.
+}
+
+model Domain {
+  id        String   @id @default(cuid())
+  domain    String   @unique // e.g. "links.example.com"
+  verified  Boolean  @default(false)
+  
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([profileId])
 }
 
 model Link {

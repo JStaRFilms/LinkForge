@@ -1,14 +1,20 @@
 import { LinksService } from "@/features/links/services/links.service";
+import { DomainsService } from "@/features/domains/services/domains.service";
 import { getCurrentProfile } from "@/lib/auth";
 import LinkList from "@/features/links/components/link-list";
 import AddLinkButton from "@/features/links/components/add-link-button";
 import DarkModeToggle from "@/components/ui/dark-mode-toggle";
+import DomainSettings from "@/features/domains/components/domain-settings";
+
+import { Link, Domain } from "@prisma/client";
+
+// ...
 
 export default async function DashboardPage() {
     const profile = await getCurrentProfile();
 
     if (!profile) {
-        return (
+        return ( // ... existing no profile UI
             <div className="glass rounded-2xl p-6 text-center">
                 <h2 className="text-xl font-bold text-amber-500">No Profile Yet</h2>
                 <p className="text-muted mt-2">
@@ -18,9 +24,14 @@ export default async function DashboardPage() {
         );
     }
 
-    let links;
+    let links: Link[] = [];
+    let domains: Domain[] = [];
+
     try {
-        links = await LinksService.getLinks(profile.id);
+        [links, domains] = await Promise.all([
+            LinksService.getLinks(profile.id),
+            DomainsService.list(profile.id)
+        ]);
     } catch {
         return (
             <div className="glass rounded-2xl p-6 text-center">
@@ -86,6 +97,9 @@ export default async function DashboardPage() {
                 <h2 className="text-lg font-semibold text-muted-foreground mb-4">Links</h2>
                 <LinkList links={links} />
             </div>
+
+            {/* Custom Domains */}
+            <DomainSettings domains={domains} />
         </>
     );
 }

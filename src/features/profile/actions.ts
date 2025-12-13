@@ -3,6 +3,7 @@
 import { LinksService } from "@/features/links/services/links.service";
 import { ProfileService } from "@/features/profile/services/profile.service";
 import { getCurrentUser } from "@/lib/auth";
+import { signCookie } from "@/lib/cookie-utils";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -18,8 +19,10 @@ export async function createProfileAction(formData: FormData) {
     const cookieStore = await cookies();
 
     // Ensure user ID is persisted in cookie (first time flow)
+    // Use signCookie to match middleware expectations
     if (!cookieStore.get("linkforge_user_id")?.value) {
-        cookieStore.set("linkforge_user_id", user.id, {
+        const signedUserId = await signCookie(user.id);
+        cookieStore.set("linkforge_user_id", signedUserId, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
