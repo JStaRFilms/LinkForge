@@ -14,12 +14,20 @@ async function main() {
         return;
     }
 
+    // Create a seed user first
+    const user = await prisma.user.create({
+        data: {},
+    });
+    console.log("Created seed user:", user.id);
+
     const profile = await prisma.profile.create({
         data: {
             username,
             name: "John Doe",
             bio: "Creator • Developer • Dreamer",
             theme: "dark",
+            userId: user.id,
+            isPrimary: true,
             links: {
                 create: [
                     { title: "My Portfolio", url: "https://johndoe.com", icon: "🚀", order: 0, clicks: 1203 },

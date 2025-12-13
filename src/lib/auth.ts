@@ -2,7 +2,7 @@
  * Authentication Helper
  *
  * Centralized auth abstraction for LinkForge.
- * Currently uses seed profile as placeholder.
+ * Uses cookie-based user identification with HMAC-signed cookies.
  *
  * TODO: Replace with real auth provider (next-auth, clerk, supabase-auth)
  * When implementing real auth:
@@ -12,39 +12,73 @@
  */
 
 import { cache } from "react";
+import { cookies } from "next/headers";
+import { User, Profile } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { verifyCookie } from "@/lib/cookie-utils";
+import { UserService } from "@/features/user/services/user.service";
 
 export interface AuthProfile {
     id: string;
     username: string;
     name: string | null;
     theme: string;
+    userId: string;
 }
 
-/**
- * Get the current authenticated user's profile.
- * Throws if not authenticated or profile doesn't exist.
- * 
- * Uses React cache() to deduplicate calls within the same request.
- */
-export const getCurrentProfile = cache(async (): Promise<AuthProfile> => {
-    // TODO: Replace with real auth
-    // const session = await auth();
-    // if (!session?.user) throw new Error("Not authenticated");
-    // return prisma.profile.findUniqueOrThrow({ where: { userId: session.user.id } });
+type UserWithProfiles = User & { profiles: Profile[] };
 
-    const profile = await prisma.profile.findFirst({
-        where: { username: "johndoe" },
-        select: { id: true, username: true, name: true, theme: true },
+const COOKIE_USER_ID = "linkforge_user_id";
+const COOKIE_ACTIVE_PROFILE = "linkforge_active_profile";
+
+/**
+ * Get (or create) the current user based on signed cookie.
+ * Verifies cookie signature before trusting the user ID.
+ */
+export const getCurrentUser = cache(async (): Promise<UserWithProfiles> => {
+    const cookieStore = await cookies();
+    const signedUserId = cookieStore.get(COOKIE_USER_ID)?.value;
+
+    // Verify signature and extract user ID
+    const userId = signedUserId ? await verifyCookie(signedUserId) : undefined;
+
+    // ensureUser handles both existing and new users
+    return UserService.ensureUser(userId ?? undefined);
+});
+
+/**
+ * Get the current active profile.
+ * - Checks active_profile cookie
+ * - Verifies ownership
+ * - Fallbacks to primary or first profile
+ * - Returns null if no profiles exist (onboarding state)
+ */
+export const getCurrentProfile = cache(async (): Promise<AuthProfile | null> => {
+    const user = await getCurrentUser();
+    if (!user) return null;
+
+    const cookieStore = await cookies();
+    const activeProfileId = cookieStore.get(COOKIE_ACTIVE_PROFILE)?.value;
+
+    const profiles = await prisma.profile.findMany({
+        where: { userId: user.id },
     });
 
-    if (!profile) {
-        throw new Error(
-            "Profile not found. Run `npx prisma db seed` to create the demo profile."
-        );
+    if (profiles.length === 0) return null;
+
+    let activeProfile = profiles.find((p) => p.id === activeProfileId);
+    if (!activeProfile) {
+        activeProfile = profiles.find((p) => p.isPrimary) || profiles[0];
     }
 
-    return profile;
+    // Map to AuthProfile interface
+    return {
+        id: activeProfile.id,
+        username: activeProfile.username,
+        name: activeProfile.name,
+        theme: activeProfile.theme,
+        userId: activeProfile.userId,
+    };
 });
 
 /**
@@ -53,5 +87,9 @@ export const getCurrentProfile = cache(async (): Promise<AuthProfile> => {
  */
 export async function requireProfileId(): Promise<string> {
     const profile = await getCurrentProfile();
+    if (!profile) {
+        throw new Error("No active profile found.");
+    }
     return profile.id;
 }
+

@@ -3,15 +3,14 @@ import ThemePicker from "@/features/themes/components/theme-picker";
 import Link from "next/link";
 
 export default async function ThemesPage() {
-    let profile;
-    try {
-        profile = await getCurrentProfile();
-    } catch {
+    const profile = await getCurrentProfile();
+
+    if (!profile) {
         return (
             <div className="glass rounded-2xl p-6 text-center">
-                <h2 className="text-xl font-bold text-red-500">Profile Not Found</h2>
+                <h2 className="text-xl font-bold text-amber-500">No Profile Yet</h2>
                 <p className="text-muted mt-2">
-                    Run <code className="bg-input px-2 py-1 rounded">npx prisma db seed</code> to create the demo profile.
+                    Create your first profile using the switcher in the sidebar.
                 </p>
             </div>
         );

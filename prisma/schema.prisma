@@ -10,6 +10,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String    @id @default(cuid())
+  email     String?   // Optional for cookie-based auth; add @unique when auth is required
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  profiles  Profile[]
+}
+
 model Profile {
   id        String   @id @default(cuid())
   username  String   @unique
@@ -18,8 +26,17 @@ model Profile {
   avatar    String?
   theme     String   @default("dark")
   links     Link[]
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  isPrimary Boolean  @default(false)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  // Note: SQLite doesn't support partial unique indexes.
+  // isPrimary enforcement is handled at the application layer.
 }
 
 model Link {
