@@ -1,18 +1,21 @@
 "use client";
 
-import { createLinkAction } from "../actions";
+import { updateLinkAction } from "../actions";
 import { useState } from "react";
+import { Link as LinkType } from "@prisma/client";
 
-interface AddLinkModalProps {
+interface EditLinkModalProps {
+    link: LinkType;
     onClose: () => void;
 }
 
-export default function AddLinkModal({ onClose }: AddLinkModalProps) {
+export default function EditLinkModal({ link, onClose }: EditLinkModalProps) {
     const [isPending, setIsPending] = useState(false);
 
     async function handleSubmit(formData: FormData) {
         setIsPending(true);
-        await createLinkAction(formData);
+        formData.set("id", link.id);
+        await updateLinkAction(formData);
         setIsPending(false);
         onClose();
     }
@@ -20,7 +23,7 @@ export default function AddLinkModal({ onClose }: AddLinkModalProps) {
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
             <div className="glass rounded-2xl p-8 w-full max-w-md animate-in zoom-in-95 duration-200" onClick={(e) => e.stopPropagation()}>
-                <h2 className="text-2xl font-bold mb-6">Add New Link</h2>
+                <h2 className="text-2xl font-bold mb-6">Edit Link</h2>
 
                 <form action={handleSubmit} className="space-y-4">
                     <div>
@@ -28,6 +31,7 @@ export default function AddLinkModal({ onClose }: AddLinkModalProps) {
                         <input
                             name="title"
                             type="text"
+                            defaultValue={link.title}
                             placeholder="My awesome link"
                             required
                             className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
@@ -39,6 +43,7 @@ export default function AddLinkModal({ onClose }: AddLinkModalProps) {
                         <input
                             name="url"
                             type="url"
+                            defaultValue={link.url}
                             placeholder="https://example.com"
                             required
                             className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
@@ -48,10 +53,15 @@ export default function AddLinkModal({ onClose }: AddLinkModalProps) {
                     <div>
                         <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-2">Icon</label>
                         <div className="grid grid-cols-6 gap-2">
-                            {/* Simplified Icon Picker for now */}
-                            {['🚀', '📧', '🎥', '☕', '✨', '💼', '🐦', '📷', '🎵', '🛒'].map((emoji) => (
+                            {['🚀', '📧', '🎥', '☕', '✨', '💼', '🐦', '📷', '🎵', '🛒', '🔗'].map((emoji) => (
                                 <label key={emoji} className="cursor-pointer">
-                                    <input type="radio" name="icon" value={emoji} className="peer sr-only" defaultChecked={emoji === '🚀'} />
+                                    <input
+                                        type="radio"
+                                        name="icon"
+                                        value={emoji}
+                                        className="peer sr-only"
+                                        defaultChecked={link.icon === emoji}
+                                    />
                                     <div className="p-3 bg-slate-100 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl text-xl hover:border-slate-400 dark:hover:border-slate-600 peer-checked:bg-primary-500/20 peer-checked:border-primary-500 flex items-center justify-center">
                                         {emoji}
                                     </div>
@@ -79,7 +89,7 @@ export default function AddLinkModal({ onClose }: AddLinkModalProps) {
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
-                            ) : 'Add Link'}
+                            ) : 'Save Changes'}
                         </button>
                     </div>
                 </form>

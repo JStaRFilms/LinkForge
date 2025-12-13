@@ -93,7 +93,48 @@
   .stagger-4 { animation-delay: 0.4s; }
 }
 
-/* Base Styles */
+/* Base Styles - Light Mode Default */
 body {
-  @apply bg-slate-950 text-slate-50 antialiased;
+  @apply bg-slate-100 text-slate-900 antialiased;
+}
+
+/* Dark Mode Override */
+html.dark body {
+  @apply bg-slate-950 text-slate-50;
+}
+
+/* Glass utility for light mode */
+html:not(.dark) .glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Slate text adjustments for light mode */
+html:not(.dark) .text-slate-400 {
+  color: rgb(100 116 139); /* slate-500 for better contrast */
+}
+
+html:not(.dark) .text-slate-500 {
+  color: rgb(71 85 105); /* slate-600 for better contrast */
+}
+
+html:not(.dark) .bg-slate-800 {
+  background-color: rgb(226 232 240); /* slate-200 */
+}
+
+html:not(.dark) .bg-slate-800\/50 {
+  background-color: rgb(226 232 240 / 0.5);
+}
+
+html:not(.dark) .border-slate-700 {
+  border-color: rgb(203 213 225); /* slate-300 */
+}
+
+html:not(.dark) .hover\:bg-slate-800:hover {
+  background-color: rgb(226 232 240); /* slate-200 */
+}
+
+html:not(.dark) .hover\:bg-slate-800\/50:hover {
+  background-color: rgb(226 232 240 / 0.5);
 }
