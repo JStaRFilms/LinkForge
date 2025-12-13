@@ -68,7 +68,7 @@ export async function reorderLinksAction(items: { id: string; order: number }[])
     const profileId = await requireProfileId();
     const parsed = reorderLinksSchema.safeParse(items);
 
-    if (!parsed.success) return { error: "Invalid data" };
+    if (!parsed.success) return { error: { fieldErrors: {}, formErrors: ["Invalid data"] } };
 
     await LinksService.reorderLinks(profileId, parsed.data);
     revalidatePath("/dashboard");

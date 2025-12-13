@@ -9,7 +9,7 @@ import { themeKeySchema } from "./schemas";
  * Update the current user's theme.
  * @param theme - Theme key to set (validated with Zod)
  */
-export async function updateThemeAction(theme: string) {
+export async function updateThemeAction(theme: string): Promise<{ error: string } | { success: boolean }> {
     let profile;
     try {
         profile = await getCurrentProfile();

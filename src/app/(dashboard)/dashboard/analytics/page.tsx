@@ -54,7 +54,7 @@ export default async function AnalyticsPage() {
                     </div>
                     <p className="text-slate-500 text-sm mt-1">
                         {sortedLinks[0]?.clicks.toLocaleString() || 0} clicks
-                        {totalClicks > 0 && ` (${Math.round((sortedLinks[0]?.clicks / totalClicks) * 100)}%)`}
+                        {totalClicks > 0 && sortedLinks[0]?.clicks != null && ` (${Math.round((sortedLinks[0].clicks / totalClicks) * 100)}%)`}
                     </p>
                 </div>
             </div>
