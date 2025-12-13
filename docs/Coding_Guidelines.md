@@ -151,17 +151,61 @@ export const createLinkSchema = z.object({
 export type CreateLinkInput = z.infer<typeof createLinkSchema>;
 ```
 
-### 5. Styling: Tailwind CSS Only
+### 5. Styling: Tailwind CSS v4
 
-```typescript
-// ✅ Tailwind utilities
-<button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full hover:scale-105 transition-transform">
-  Click Me
-</button>
+> [!TIP]
+> See `docs/Styling-in-Next-and-Tailwind-v4.md` for the full guide.
 
-// ❌ No inline styles or CSS modules
-<button style={{ backgroundColor: 'purple' }}>Click Me</button>
+**Tailwind v4 uses a CSS-first approach with design tokens. Follow these rules:**
+
+#### Token-Based Colors (NOT inline dark: variants)
+```css
+/* ✅ In globals.css — Define tokens in @theme */
+@theme {
+  --color-background: #f1f5f9;
+  --color-foreground: #0f172a;
+  --color-muted: #64748b;
+}
+
+@theme .dark {
+  --color-background: #020617;
+  --color-foreground: #f8fafc;
+  --color-muted: #94a3b8;
+}
 ```
+
+```tsx
+// ✅ In Components — Use semantic utilities
+<div className="bg-background text-foreground">
+  <p className="text-muted">Subtitle</p>
+</div>
+
+// ❌ AVOID inline dark: variants everywhere
+<div className="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-50">
+  <p className="text-slate-600 dark:text-slate-400">Subtitle</p>
+</div>
+```
+
+#### Available Semantic Utilities
+
+| Utility | Light Mode | Dark Mode | Usage |
+|---------|------------|-----------|-------|
+| `bg-background` | slate-100 | slate-950 | Page/section backgrounds |
+| `text-foreground` | slate-900 | slate-50 | Primary text |
+| `text-muted` | slate-500 | slate-400 | Secondary text |
+| `text-muted-foreground` | slate-600 | slate-300 | Tertiary text |
+| `bg-card` | white | slate-900/80 | Card surfaces |
+| `bg-input` | slate-200 | slate-800 | Input backgrounds |
+| `border-border` | slate-300 | slate-700 | All borders |
+| `ring-ring` | primary-500 | primary-400 | Focus rings |
+
+#### Key Rules
+1. **Define colors in `@theme`**, not in `tailwind.config`
+2. **Use semantic tokens** — `bg-background`, `text-foreground`, `border-border`
+3. **Dark mode via `@theme .dark { }`** — NOT inline `dark:` variants
+4. **Base styles in `@layer base { }`** — Apply tokens globally
+5. **Custom utilities in `@layer utilities { }`** — Define `.glass`, `.gradient-text`, etc.
+6. **Restart dev server** after structural CSS changes
 
 ### 6. The 200-Line Rule
 

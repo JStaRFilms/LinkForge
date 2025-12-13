@@ -70,6 +70,59 @@ model Link {
 Technically we are using App Router, so Server Actions are the "VibeCode" way, but the guidelines mentioned API routes for services. We will stick to **Server Actions** for mutation efficiency and type safety with Zod, unless API routes are strictly required for external consumption (not needed yet).
 *Correction based on Guideline 3:* Guidelines mention `app/api/links/route.ts`. We will implement API routes to strictly follow the provided guide, but might use Server Actions for the UI forms if permitted. Let's stick to **Server Actions** for form handling (Next.js 15 standard) but keep Service pattern underlying both.
 
+### Server Actions Reference
+
+All actions are in [actions.ts](file:///c:/CreativeOS/01_Projects/Code/Personal_Stuff/2025-12-12_LinkForge/src/features/links/actions.ts).
+
+#### `createLinkAction(formData: FormData)`
+Creates a new link for the current user.
+
+**FormData fields:**
+- `title` (string, required) - Link display title
+- `url` (string, required) - Full URL including protocol
+- `icon` (string, optional) - Emoji or icon identifier
+
+**Returns:** `{ success: true }` or `{ error: ZodFlattenedError }`
+
+---
+
+#### `updateLinkAction(formData: FormData)`
+Updates an existing link.
+
+**FormData fields:**
+- `id` (string, required) - Link ID to update
+- `title` (string, required) - New title
+- `url` (string, required) - New URL
+- `icon` (string, optional) - New icon
+
+**Returns:** `{ success: true }` or `{ error: ZodFlattenedError }`
+
+**Example usage:**
+```typescript
+const formData = new FormData();
+formData.set("id", linkId);
+formData.set("title", "Updated Title");
+formData.set("url", "https://example.com");
+await updateLinkAction(formData);
+```
+
+**Security:** Ownership is validated via `profileId` in the service layer.
+
+---
+
+#### `deleteLinkAction(id: string)`
+Deletes a link by ID.
+
+---
+
+#### `toggleLinkAction(id: string)`
+Toggles the `isEnabled` state of a link.
+
+---
+
+#### `reorderLinksAction(items: { id: string; order: number }[])`
+Reorders links by updating their `order` field in a transaction.
+
 ## 3. Implementation Plan
 
 1.  **Dependencies**: Install `dnd-kit`, `clsx`, `tailwind-merge` (standard utils).

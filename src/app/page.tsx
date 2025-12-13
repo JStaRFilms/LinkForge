@@ -1,4 +1,5 @@
 import Link from "next/link";
+import DarkModeToggle from "@/components/ui/dark-mode-toggle";
 
 export default function Home() {
   return (
@@ -22,17 +23,13 @@ export default function Home() {
           </div>
 
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-slate-300 hover:text-white transition-colors">Features</a>
-            <a href="#examples" className="text-slate-300 hover:text-white transition-colors">Examples</a>
-            <a href="#pricing" className="text-slate-300 hover:text-white transition-colors">Pricing</a>
+            <a href="#features" className="text-muted hover:text-foreground transition-colors">Features</a>
+            <a href="#examples" className="text-muted hover:text-foreground transition-colors">Examples</a>
+            <a href="#pricing" className="text-muted hover:text-foreground transition-colors">Pricing</a>
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="p-2 text-slate-400 hover:text-white transition-colors">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-              </svg>
-            </button>
+            <DarkModeToggle />
             <Link href="/dashboard" className="px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-primary-500/30">
               Get Started
             </Link>
@@ -70,15 +67,15 @@ export default function Home() {
             One Link.<br /><span className="gradient-text">Infinite Possibilities.</span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto mb-10 opacity-0 animate-fade-up stagger-1">
-            A self-hosted link-in-bio tool that <strong className="text-white">you</strong> control. Custom domain, analytics, themes — no monthly fees.
+          <p className="text-xl md:text-2xl text-muted max-w-2xl mx-auto mb-10 opacity-0 animate-fade-up stagger-1">
+            A self-hosted link-in-bio tool that <strong className="text-foreground">you</strong> control. Custom domain, analytics, themes — no monthly fees.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-up stagger-2">
             <Link href="/dashboard" className="px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-bold text-lg rounded-2xl transition-all duration-200 hover:shadow-xl hover:shadow-primary-500/30 hover:-translate-y-1">
               Create Your Page — Free
             </Link>
-            <a href="#examples" className="px-8 py-4 bg-slate-800/50 hover:bg-slate-800 text-white font-semibold text-lg rounded-2xl border border-slate-700 transition-all duration-200 hover:-translate-y-1">
+            <a href="#examples" className="px-8 py-4 bg-input hover:bg-border text-foreground font-semibold text-lg rounded-2xl border border-border transition-all duration-200 hover:-translate-y-1">
               View Examples
             </a>
           </div>
