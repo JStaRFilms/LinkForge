@@ -1,17 +1,36 @@
 import { LinksService } from "@/features/links/services/links.service";
-import { prisma } from "@/lib/prisma";
-
-async function getProfileId() {
-    const profile = await prisma.profile.findFirst({ where: { username: "johndoe" } });
-    return profile?.id || "";
-}
+import { getCurrentProfile } from "@/lib/auth";
 
 export default async function AnalyticsPage() {
-    const profileId = await getProfileId();
-    const links = await LinksService.getLinks(profileId);
+    let profile;
+    try {
+        profile = await getCurrentProfile();
+    } catch {
+        return (
+            <div className="glass rounded-2xl p-6 text-center">
+                <h2 className="text-xl font-bold text-red-500">Profile Not Found</h2>
+                <p className="text-muted mt-2">
+                    Run <code className="bg-input px-2 py-1 rounded">npx prisma db seed</code> to create the demo profile.
+                </p>
+            </div>
+        );
+    }
 
+    let links;
+    try {
+        links = await LinksService.getLinks(profile.id);
+    } catch {
+        return (
+            <div className="glass rounded-2xl p-6 text-center">
+                <h2 className="text-xl font-bold text-red-500">Error Loading Analytics</h2>
+                <p className="text-muted mt-2">Failed to fetch link data. Please try again.</p>
+            </div>
+        );
+    }
+
+    // Calculate analytics data
     const totalClicks = links.reduce((acc, link) => acc + link.clicks, 0);
-    const maxClicks = Math.max(...links.map((l) => l.clicks), 1); // Avoid division by zero
+    const maxClicks = Math.max(...links.map((l) => l.clicks), 1);
     const sortedLinks = [...links].sort((a, b) => b.clicks - a.clicks);
 
     return (

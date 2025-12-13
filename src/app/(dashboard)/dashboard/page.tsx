@@ -1,20 +1,35 @@
 import { LinksService } from "@/features/links/services/links.service";
-import LinkList from "@/features/links/components/link-list"; // To be created
-import AddLinkButton from "@/features/links/components/add-link-button"; // To be created
+import { getCurrentProfile } from "@/lib/auth";
+import LinkList from "@/features/links/components/link-list";
+import AddLinkButton from "@/features/links/components/add-link-button";
 import DarkModeToggle from "@/components/ui/dark-mode-toggle";
 
-// Simulating auth for now
-const DEMO_PROFILE_ID = "cmj3gwc8e000010771fcmgwg5";
-
-async function getProfileId() {
-    const { prisma } = await import("@/lib/prisma");
-    const profile = await prisma.profile.findFirst({ where: { username: "johndoe" } });
-    return profile?.id || "";
-}
-
 export default async function DashboardPage() {
-    const profileId = await getProfileId();
-    const links = await LinksService.getLinks(profileId);
+    let profile;
+    try {
+        profile = await getCurrentProfile();
+    } catch {
+        return (
+            <div className="glass rounded-2xl p-6 text-center">
+                <h2 className="text-xl font-bold text-red-500">Profile Not Found</h2>
+                <p className="text-muted mt-2">
+                    Run <code className="bg-input px-2 py-1 rounded">npx prisma db seed</code> to create the demo profile.
+                </p>
+            </div>
+        );
+    }
+
+    let links;
+    try {
+        links = await LinksService.getLinks(profile.id);
+    } catch {
+        return (
+            <div className="glass rounded-2xl p-6 text-center">
+                <h2 className="text-xl font-bold text-red-500">Error Loading Links</h2>
+                <p className="text-muted mt-2">Failed to fetch links. Please try again.</p>
+            </div>
+        );
+    }
 
     // Calculate stats
     const totalClicks = links.reduce((acc, link) => acc + link.clicks, 0);

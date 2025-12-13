@@ -1,16 +1,20 @@
-import { prisma } from "@/lib/prisma";
+import { getCurrentProfile } from "@/lib/auth";
 import ThemePicker from "@/features/themes/components/theme-picker";
 import Link from "next/link";
 
-async function getProfile() {
-    return prisma.profile.findFirst({ where: { username: "johndoe" } });
-}
-
 export default async function ThemesPage() {
-    const profile = await getProfile();
-
-    if (!profile) {
-        return <div>Profile not found.</div>;
+    let profile;
+    try {
+        profile = await getCurrentProfile();
+    } catch {
+        return (
+            <div className="glass rounded-2xl p-6 text-center">
+                <h2 className="text-xl font-bold text-red-500">Profile Not Found</h2>
+                <p className="text-muted mt-2">
+                    Run <code className="bg-input px-2 py-1 rounded">npx prisma db seed</code> to create the demo profile.
+                </p>
+            </div>
+        );
     }
 
     return (

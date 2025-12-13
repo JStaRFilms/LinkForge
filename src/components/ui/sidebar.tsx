@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+
+interface SidebarProps {
+    username: string;
+}
 
 const navItems = [
     {
@@ -34,7 +37,7 @@ const navItems = [
     },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ username }: SidebarProps) {
     const pathname = usePathname();
 
     return (
@@ -77,7 +80,7 @@ export default function Sidebar() {
 
             {/* Profile Preview Link */}
             <div className="absolute bottom-6 left-6 right-6">
-                <Link href="/johndoe" target="_blank" className="flex items-center gap-3 px-4 py-3 glass rounded-xl hover:bg-input transition-colors">
+                <Link href={`/${username}`} target="_blank" className="flex items-center gap-3 px-4 py-3 glass rounded-xl hover:bg-input transition-colors">
                     <svg className="w-5 h-5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>

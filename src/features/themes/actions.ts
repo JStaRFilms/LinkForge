@@ -2,28 +2,29 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { ThemeKey, THEMES } from "./themes";
+import { getCurrentProfile } from "@/lib/auth";
+import { themeKeySchema } from "./schemas";
 
-async function getProfileId() {
-    const profile = await prisma.profile.findFirst({ where: { username: "johndoe" } });
-    if (!profile) throw new Error("Profile not found");
-    return profile.id;
-}
-
+/**
+ * Update the current user's theme.
+ * @param theme - Theme key to set (validated with Zod)
+ */
 export async function updateThemeAction(theme: string) {
-    const profileId = await getProfileId();
+    const profile = await getCurrentProfile();
 
-    // Validate theme key
-    if (!Object.keys(THEMES).includes(theme)) {
+    // Validate theme key with Zod
+    const parsed = themeKeySchema.safeParse(theme);
+    if (!parsed.success) {
         return { error: "Invalid theme" };
     }
 
     await prisma.profile.update({
-        where: { id: profileId },
-        data: { theme },
+        where: { id: profile.id },
+        data: { theme: parsed.data },
     });
 
+    // Dynamic path revalidation based on actual username
     revalidatePath("/dashboard/themes");
-    revalidatePath("/johndoe"); // Revalidate public profile
+    revalidatePath(`/${profile.username}`);
     return { success: true };
 }
